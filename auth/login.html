@@ -2,29 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   <title>Login - UB Lipa Event Scheduler</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header class="topbar">
-        <div class="logo-title">
-          <img src=" " alt="UB Logo" class="logo">
-          <span class="title">UB Lipa Event Scheduler</span>
-        </div>
-      </header>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="logo-title">
+      <img src="../img/ublogo1.png" alt="UB Logo" class="logo">
+      <span class="title">UB Lipa Event Scheduler</span>
+    </div>
+  </header>
+
+  <!-- Login Container -->
   <div class="container">
     <h2>Login</h2>
     <form method="POST" action="#">
-      <label>Username</label>
-      <input type="text" name="username" required>
 
-      <label>Password</label>
-      <input type="password" name="password" required>
+      <!-- Username -->
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="Enter your username" required title="Enter your username">
+
+      <!-- Password -->
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter your password" required title="Enter your password">
 
       <input type="submit" value="Login">
-      <button class="test1" href="./dashboard/">test</button>
     </form>
+
     <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
   </div>
+
 </body>
 </html>
