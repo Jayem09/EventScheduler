@@ -3,24 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <title>Sign Up - UB Lipa Event Scheduler</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css"> 
 </head>
 <body>
-    <header class="topbar">
-        <div class="logo-title">
-          <img src="../img/ublogo1.png" alt="UB Logo" class="logo">
-          <span class="title">UB Lipa Event Scheduler</span>
-        </div>
-      </header>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="logo-title">
+      <img src="../img/ublogo1.png" alt="UB Logo" class="logo">
+      <span class="title">UB Lipa Event Scheduler</span>
+    </div>
+  </header>
+
+  <!-- Sign Up Container -->
   <div class="container">
     <h2>Sign Up</h2>
-    <form method="POST" action="#">
+
+    <!-- Success or Error Messages Here -->
+    <div id="message"></div>
+
+    <form method="POST" action="php/signup.php">
       <label>First Name</label>
       <input type="text" name="fname" placeholder="Enter your first name" required title="Enter your firstname">
 
-
       <label>Last Name</label>
-      <input type="text" name="lname" placeholder="Enter your last name" required title="Enter your last name">
+      <input type="text" name="lname" placeholder="Enter your last name" required title="Enter your lastname">
 
       <label>Username</label>
       <input type="text" name="username" placeholder="Enter your username" required title="Enter your username">
@@ -30,7 +37,28 @@
 
       <input type="submit" value="Sign Up">
     </form>
+
     <p>Already have an account? <a href="login.html">Login here</a></p>
   </div>
+
 </body>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const params = new URLSearchParams(window.location.search);
+  const messageDiv = document.getElementById("message");
+
+  if (params.has('error')) {
+    let error = params.get('error');
+    if (error === 'username_taken') {
+      messageDiv.innerHTML = '<div class="error-message">Username already exists. Please choose another one.</div>';
+    } else if (error === 'insert_failed') {
+      messageDiv.innerHTML = '<div class="error-message">An error occurred during signup. Please try again.</div>';
+    }
+  } else if (params.has('signup') && params.get('signup') === 'success') {
+    messageDiv.innerHTML = '<div class="success-message">Account created successfully! Please login.</div>';
+  }
+});
+</script>
+
 </html>

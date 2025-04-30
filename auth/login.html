@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - UB Lipa Event Scheduler</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css"> <!-- adjust path if needed -->
 </head>
 <body>
 
@@ -19,8 +19,11 @@
   <!-- Login Container -->
   <div class="container">
     <h2>Login</h2>
-    <form method="POST" action="#">
 
+    <!-- Success and error messages will appear here dynamically if needed -->
+    <div id="message"></div>
+
+    <form method="POST" action="../auth/php/login.php"> 
       <!-- Username -->
       <label for="username">Username</label>
       <input type="text" id="username" name="username" placeholder="Enter your username" required title="Enter your username">
@@ -35,5 +38,23 @@
     <p>Don't have an account? <a href="signup.html">Sign up here</a></p>
   </div>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const params = new URLSearchParams(window.location.search);
+      const messageDiv = document.getElementById("message");
+    
+      if (params.has('error')) {
+        let error = params.get('error');
+        if (error === 'invalid_password') {
+          messageDiv.innerHTML = '<div class="error-message">Invalid password. Please try again.</div>';
+        } else if (error === 'username_not_found') {
+          messageDiv.innerHTML = '<div class="error-message">Username not found. Please register first.</div>';
+        }
+      } else if (params.has('signup') && params.get('signup') === 'success') {
+        messageDiv.innerHTML = '<div class="success-message">Account created successfully! Please login.</div>';
+      }
+    });
+    </script>
+    
 </body>
 </html>

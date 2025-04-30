@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UB Lipa Event Scheduler - Upcoming Events</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #5b0b1e; /* Maroon */
+      padding: 20px;
+    }
+    .upcoming-events {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 30px;
+    }
+    .event-card {
+      background-color: #f9f9f9;
+      border: 1px solid #5b0b1e;
+      padding: 15px;
+      margin: 10px 0;
+      width: 80%;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
+    }
+    .event-card:hover {
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    }
+    .event-date {
+      font-size: 18px;
+      font-weight: bold;
+      color: #7a1230;
+    }
+    .event-name {
+      font-size: 22px;
+      font-weight: bold;
+    }
+    .event-location {
+      font-size: 18px;
+    }
+    .event-link {
+      color: #5b0b1e;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .event-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="topbar">
+    <div class="logo-title">
+      <img src="/IPT_UBEVENT/img/ublogo1.png" alt="UB Logo" class="logo">
+      <span class="title">UB Lipa Event Scheduler</span>
+    </div>
+    <nav>
+        <a href="../Home/home.html">Home</a>
+        <a href="../browseEvent/BrowseEvent.html">Browse Events</a>
+      <a href="#">Departments</a>
+      <a href="#">About</a>
+    </nav>
+  </header>
+
+  <!-- UPCOMING EVENTS SECTION -->
+  <section class="upcoming-events">
+    <h2>Upcoming Events</h2>
+
+    <!-- Upcoming event cards will be displayed here -->
+    <div id="event-list">
+      <!-- Dynamic event cards will load here -->
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© UB Lipa Static Info System</p>
+  </footer>
+
+  <script>
+    // JavaScript to load upcoming events dynamically
+    document.addEventListener("DOMContentLoaded", function() {
+      let upcomingEvents = [];
+
+      // Function to fetch and display upcoming events from events.xml
+      function loadEvents() {
+        fetch("/IPT_UBEVENT/data/events.xml")
+          .then(response => response.text())
+          .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
+          .then(data => {
+            const events = data.getElementsByTagName("event");
+            upcomingEvents = []; // Clear existing data
+            for (let i = 0; i < events.length; i++) {
+              const eventDate = new Date(events[i].getElementsByTagName("date")[0]?.textContent || "");
+              const currentDate = new Date();
+              if (eventDate >= currentDate) { // Only show future events
+                upcomingEvents.push({
+                  date: eventDate.toDateString(),
+                  eventName: events[i].getElementsByTagName("eventName")[0]?.textContent || "",
+                  location: events[i].getElementsByTagName("location")[0]?.textContent || "",
+                  registrationLink: events[i].getElementsByTagName("registrationLink")[0]?.textContent || "",
+                });
+              }
+            }
+            displayEvents(upcomingEvents);
+          })
+          .catch(error => console.error(error));
+      }
+
+      function displayEvents(events) {
+        const eventListContainer = document.getElementById("event-list");
+        eventListContainer.innerHTML = ""; // Clear existing content
+        events.forEach(event => {
+          const eventCard = `
+            <div class="event-card">
+              <div class="event-date">${event.date}</div>
+              <div class="event-name">${event.eventName}</div>
+              <div class="event-location">${event.location}</div>
+              <a href="${event.registrationLink}" class="event-link" target="_blank">Register Here</a>
+            </div>
+          `;
+          eventListContainer.innerHTML += eventCard;
+        });
+      }
+
+      loadEvents(); // Load events initially
+    });
+  </script>
+
+</body>
+</html>
