@@ -25,33 +25,42 @@ if (file_exists($xmlFile)) {
     $xml = new SimpleXMLElement('<events></events>');
 }
 
-// Generate a unique ID for the new event (using UUID as an example)
-$eventId = uniqid('event_', true);  // Creates a unique ID like "event_605c72efb8a1f"
+// Prepare the SQL query
+$stmt = $conn->prepare("INSERT INTO events (date, time, event_name, location, department, event_type, target_audience, registration_link, contact_information, agenda) 
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-// Add the new event to XML
-$newEvent = $xml->addChild('event');
-$newEvent->addChild('id', $eventId);  // Add unique ID here
-$newEvent->addChild('date', $_POST['date']);
-$newEvent->addChild('time', $_POST['time']);
-$newEvent->addChild('eventName', $_POST['eventName']);
-$newEvent->addChild('location', $_POST['location']);
-$newEvent->addChild('department', $_POST['department']);
-$newEvent->addChild('eventType', $_POST['eventType']);
-$newEvent->addChild('targetAudience', $_POST['targetAudience']);
-$newEvent->addChild('registrationLink', $_POST['registrationLink']);
-$newEvent->addChild('contactInformation', $_POST['contactInformation']);
-$newEvent->addChild('agenda', $_POST['agenda']);
+if ($stmt === false) {
+    die("Error preparing statement: " . $conn->error);
+}
 
-// Save the updated XML
-$xml->asXML($xmlFile);
-
-// Insert into MySQL database
-$stmt = $conn->prepare("INSERT INTO events (id, date, time, event_name, location, department, event_type, target_audience, registration_link, contact_information, agenda) 
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-$stmt->bind_param("sssssssssss", $eventId, $_POST['date'], $_POST['time'], $_POST['eventName'], $_POST['location'], $_POST['department'], 
+// Bind parameters to the SQL query
+$stmt->bind_param("ssssssssss", $_POST['date'], $_POST['time'], $_POST['eventName'], $_POST['location'], $_POST['department'], 
                   $_POST['eventType'], $_POST['targetAudience'], $_POST['registrationLink'], $_POST['contactInformation'], $_POST['agenda']);
-                  
+
+// Execute the query
 if ($stmt->execute()) {
+    // Get the last inserted id from MySQL (auto-incremented id)
+    $eventId = $conn->insert_id;
+
+    // Add the new event to XML with the same ID as in the database
+    $newEvent = $xml->addChild('event');
+    $newEvent->addChild('id', $eventId);  // Use the MySQL auto-incremented ID for XML
+    $newEvent->addChild('date', $_POST['date']);
+    $newEvent->addChild('time', $_POST['time']);
+    $newEvent->addChild('eventName', $_POST['eventName']);
+    $newEvent->addChild('location', $_POST['location']);
+    $newEvent->addChild('department', $_POST['department']);
+    $newEvent->addChild('eventType', $_POST['eventType']);
+    $newEvent->addChild('targetAudience', $_POST['targetAudience']);
+    $newEvent->addChild('registrationLink', $_POST['registrationLink']);
+    $newEvent->addChild('contactInformation', $_POST['contactInformation']);
+    $newEvent->addChild('agenda', $_POST['agenda']);
+
+    // Save the updated XML
+    if (!$xml->asXML($xmlFile)) {
+        die("Error saving XML file.");
+    }
+
     // Redirect to browse event page after successfully inserting into DB and XML
     header("Location: http://127.0.0.1/IPT_UbEvent/dashboard/browseEvent/browseEvent.html");
     exit();
