@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $update_stmt->close();
 
             // Redirect to dashboard
-            header("Location: http://127.0.0.1:/IPT_UbEvent/dashboard/browseEvent/BrowseEvent.html");
+            header("Location: http://127.0.0.1/IPT_UbEvent/dashboard/Home/home.html");
             exit();
         } else {
             // Invalid password

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Event - UB Lipa Event Scheduler</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    /* Basic Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Body and Page Layout */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    /* Topbar */
+    .topbar {
+      background-color: #5b0b1e;
+      padding: 15px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-title {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      height: 40px;
+      margin-right: 10px;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 10px;
+      font-size: 16px;
+    }
+
+    nav a:hover {
+      text-decoration: underline;
+    }
+
+    /* Form Section */
+    .form-section {
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      max-width: 600px;
+      margin: 20px auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-section h2 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #5b0b1e;
+    }
+
+    .event-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .event-form label {
+      font-size: 16px;
+      font-weight: normal;
+    }
+
+    .event-form input, .event-form select, .event-form textarea {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 100%;
+    }
+
+    .event-form button {
+      padding: 12px;
+      font-size: 16px;
+      background-color: #5b0b1e;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .event-form button:hover {
+      background-color: #7a1230;
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 14px;
+      color: #777;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="topbar">
+    <div class="logo-title">
+      <img src="/IPT_UBEVENT/img/ublogo1.png" alt="UB Logo" class="logo">
+      <span class="title">UB Lipa Event Scheduler</span>
+    </div>
+    <nav>
+      <a href="../Home/home.html">Home</a>
+      <a href="../browseEvent/BrowseEvent.html">Browse Events</a>
+      <a href="../browseEvent/addEvents.html">Add Events</a>
+      <a href="#">About</a>
+    </nav>
+  </header>
+
+  <!-- FORM SECTION -->
+  <section class="form-section">
+    <h2>Add New Event</h2>
+    <form action="http://127.0.0.1/IPT_UbEvent/auth/php/addEvent.php" method="post" class="event-form">
+      <label>Date: <input type="date" name="date" required></label>
+      
+      <!-- Time Field: Allow manual input -->
+      <label>Time: <input type="text" name="time" placeholder="(8:30 - 10:30 AM)" required></label>
+
+      <label>Event Name: <input type="text" name="eventName" required></label>
+
+      <!-- Department Dropdown -->
+      <label>Department: 
+        <select name="department" required>
+          <option value="">Select Department</option>
+          <option value="CITEC">CITEC</option>
+          <option value="CMT">CMT</option>
+          <option value="CENAR">CENAR</option>
+          <option value="CEAS">CEAS</option>
+          <option value="CCJE">CCJE</option>
+          <option value="JUNIOR HIGH SCHOOL">JUNIOR HIGH SCHOOL</option>
+          <option value="SENIOR HIGH SCHOOL">SENIOR HIGH SCHOOL</option>
+        </select>
+      </label>
+
+      <!-- Location Dropdown -->
+      <label>Location: 
+        <select name="location" required>
+          <option value="">Select Location</option>
+          <option value="UB LIPA MULTI-PURPOSE HALL (BUILDING C - 4TH FLOOR)">UB LIPA MULTI-PURPOSE HALL (BUILDING C - 4TH FLOOR)</option>
+          <option value="UB LIPA TIERED LECTURE HALL (BUILDING C - 4TH FLOOR)">UB LIPA TIERED LECTURE HALL (BUILDING C - 4TH FLOOR)</option>
+          <option value="UB LIPA CAFE TRATTORIA (BUILDING C - 2ND FLOOR)">UB LIPA CAFE TRATTORIA (BUILDING C - 2ND FLOOR)</option>
+          <option value="UB LIPA AUDIO VISUAL ROOM (BUILDING A - 3RD FLOOR)">UB LIPA AUDIO VISUAL ROOM (BUILDING A - 3RD FLOOR)</option>
+          <option value="UB LIPA GYMNASIUM">UB LIPA GYMNASIUM</option>
+        </select>
+      </label>
+
+      <label>Event Type: <input type="text" name="eventType" required></label>
+      <label>Target Audience: <input type="text" name="targetAudience" required></label>
+      <label>Registration Link: <input type="url" name="registrationLink"></label>
+      <label>Contact Information: <input type="text" name="contactInformation" required></label>
+      <label>Agenda: <textarea name="agenda" required></textarea></label>
+      
+      <button type="submit">Save Event</button>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© UB Lipa Info System</p>
+  </footer>
+
+</body>
+</html>

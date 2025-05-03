@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fname = trim($_POST['fname']);
     $lname = trim($_POST['lname']);
     $username = trim($_POST['username']);
-    $password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT); // Hash the password
+    $password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT); 
 
     // Check if username already exists
     $check_sql = "SELECT user_id FROM users WHERE username = ?";
