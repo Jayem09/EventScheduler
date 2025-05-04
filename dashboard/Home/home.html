@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>UB Lipa Event Scheduler - Upcoming Events</title>
+  <title>UB Lipa Event Scheduler - Home</title>
   <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
@@ -16,75 +16,24 @@
     </div>
     <nav>
       <a href="../Home/home.html">Home</a>
-      <a href="../browseEvent/BrowseEvent.html">Browse Events</a>
+      <a href="../browseEvent/browseEvent.html">Browse Events</a>
       <a href="../browseEvent/addEvents.html">Add Events</a>
       <a href="#">About</a>
     </nav>
   </header>
 
-  <!-- UPCOMING EVENTS SECTION -->
-  <section class="upcoming-events">
-    <h2>Upcoming Events</h2>
-
-    <!-- Upcoming event cards  -->
-    <div id="event-list">
+  <!-- MAIN SECTION -->
+  <main class="upcoming-events">
+    <h2>Welcome to UB Lipa Event Scheduler</h2>
+    <div class="button-container">
+      <a href="../browseEvent/browseEvent.html" class="add-event-btn">See Upcoming Events</a>
     </div>
-  </section>
+  </main>
 
   <!-- FOOTER -->
   <footer class="footer">
     <p>© UB Lipa Info System</p>
   </footer>
-
-  <script>
-    // JavaScript to load upcoming events 
-    document.addEventListener("DOMContentLoaded", function() {
-      let upcomingEvents = [];
-
-      // Function to fetch and display upcoming events from events.xml
-      function loadEvents() {
-        fetch("/IPT_UBEVENT/data/events.xml")
-          .then(response => response.text())
-          .then(str => (new window.DOMParser()).parseFromString(str, "text/xml"))
-          .then(data => {
-            const events = data.getElementsByTagName("event");
-            upcomingEvents = []; // Clear existing data
-            for (let i = 0; i < events.length; i++) {
-              const eventDate = new Date(events[i].getElementsByTagName("date")[0]?.textContent || "");
-              const currentDate = new Date();
-              if (eventDate >= currentDate) { 
-                upcomingEvents.push({
-                  date: eventDate.toDateString(),
-                  eventName: events[i].getElementsByTagName("eventName")[0]?.textContent || "",
-                  location: events[i].getElementsByTagName("location")[0]?.textContent || "",
-                  registrationLink: events[i].getElementsByTagName("registrationLink")[0]?.textContent || "",
-                });
-              }
-            }
-            displayEvents(upcomingEvents);
-          })
-          .catch(error => console.error(error));
-      }
-
-      function displayEvents(events) {
-        const eventListContainer = document.getElementById("event-list");
-        eventListContainer.innerHTML = "";
-        events.forEach(event => {
-          const eventCard = `
-            <div class="event-card">
-              <div class="event-date">${event.date}</div>
-              <div class="event-name">${event.eventName}</div>
-              <div class="event-location">${event.location}</div>
-              <a href="${event.registrationLink}" class="event-link" target="_blank">Register Here</a>
-            </div>
-          `;
-          eventListContainer.innerHTML += eventCard;
-        });
-      }
-
-      loadEvents(); 
-    });
-  </script>
 
 </body>
 </html>

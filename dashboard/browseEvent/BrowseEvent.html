@@ -70,7 +70,7 @@
             <th>Registration Link</th>
             <th>Contact Information</th>
             <th>Agenda</th>
-            <th>Actions</th> <!-- New Actions Column -->
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody id="eventsList">
@@ -124,40 +124,41 @@
     document.addEventListener("DOMContentLoaded", function() {
       let eventsData = [];
 
+      setTimeout(loadEvents, 200);  // 200ms delay to let XML save fully
+
       // Fetch events from XML file
       function loadEvents() {
-        fetch("http://127.0.0.1/IPT_UbEvent/dashboard/data/event.xml")
-          .then(response => response.text())  // Get the XML text
-          .then(str => {
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(str, "text/xml");
-            const events = xmlDoc.getElementsByTagName("event");
+  const timestamp = new Date().getTime(); // Unique timestamp
+  fetch(`http://127.0.0.1/IPT_UbEvent/dashboard/data/event.xml?cache_buster=${timestamp}`)
+    .then(response => response.text())
+    .then(str => {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(str, "text/xml");
+      const events = xmlDoc.getElementsByTagName("event");
 
-            eventsData = [];  // Clear the previous data
+      eventsData = [];
 
-            Array.from(events).forEach(event => {
-              const eventObj = {
-                id: event.getElementsByTagName("id")[0]?.textContent || "",
-                date: event.getElementsByTagName("date")[0]?.textContent || "",
-                time: event.getElementsByTagName("time")[0]?.textContent || "",
-                eventName: event.getElementsByTagName("eventName")[0]?.textContent || "",
-                location: event.getElementsByTagName("location")[0]?.textContent || "",
-                department: event.getElementsByTagName("department")[0]?.textContent || "",
-                eventType: event.getElementsByTagName("eventType")[0]?.textContent || "",
-                targetAudience: event.getElementsByTagName("targetAudience")[0]?.textContent || "",
-                registrationLink: event.getElementsByTagName("registrationLink")[0]?.textContent || "",
-                contactInformation: event.getElementsByTagName("contactInformation")[0]?.textContent || "",
-                agenda: event.getElementsByTagName("agenda")[0]?.textContent || ""
-              };
-              eventsData.push(eventObj);  // Add the event to the eventsData array
-            });
+      Array.from(events).forEach(event => {
+        eventsData.push({
+          id: event.getElementsByTagName("id")[0]?.textContent || "",
+          date: event.getElementsByTagName("date")[0]?.textContent || "",
+          time: event.getElementsByTagName("time")[0]?.textContent || "",
+          eventName: event.getElementsByTagName("eventName")[0]?.textContent || "",
+          location: event.getElementsByTagName("location")[0]?.textContent || "",
+          department: event.getElementsByTagName("department")[0]?.textContent || "",
+          eventType: event.getElementsByTagName("eventType")[0]?.textContent || "",
+          targetAudience: event.getElementsByTagName("targetAudience")[0]?.textContent || "",
+          registrationLink: event.getElementsByTagName("registrationLink")[0]?.textContent || "",
+          contactInformation: event.getElementsByTagName("contactInformation")[0]?.textContent || "",
+          agenda: event.getElementsByTagName("agenda")[0]?.textContent || ""
+        });
+      });
 
-            displayEvents(eventsData); // Display the events
-          })
-          .catch(error => {
-            console.error('Error fetching events:', error);
-          });
-      }
+      displayEvents(eventsData);
+    })
+    .catch(error => console.error('Error fetching events:', error));
+}
+
 
       // Display events in the table
       function displayEvents(events) {
@@ -179,7 +180,7 @@
             <td>${event.agenda}</td>
             <td>
               <button onclick="editEvent(${index})">Edit</button>
-              <button onclick="deleteEvent(${index})">Delete</button>
+              <button onclick="deleteEvent('${event.id}')">Delete</button>
             </td> <!-- Actions Buttons -->
           `;
           eventsList.appendChild(row);  // Append row to the table body
@@ -218,29 +219,17 @@
         };
       };
 
-      // Delete Event function
- // Delete Event function
-window.deleteEvent = function(index) {
-  const eventId = eventsData[index].id;
+// Delete Event function
+window.deleteEvent = function(eventId) {
   if (confirm("Are you sure you want to delete this event?")) {
-    // Send the delete request to the server (both DB and XML)
     fetch(`http://127.0.0.1/IPT_UbEvent/auth/php/deleteEvent.php?id=${eventId}`, { method: 'GET' })
       .then(response => response.json())
       .then(data => {
-        // Show success message if deletion is successful
         if (data.message) {
           alert(data.message);
-
-          // Remove the event from the eventsData array
-          eventsData.splice(index, 1);  // Remove event from array
-
-          // Remove the event row from the table (UI)
-          const eventsList = document.getElementById("eventsList");
-          const rowToDelete = eventsList.rows[index];  // Get the row at the given index
-          eventsList.deleteRow(index);  // Delete the row from the DOM
-
-          // Optionally, reload the events data after deletion
-          loadEvents();  // Refresh the event list to show the updated events
+          loadEvents();  // Refresh table
+        } else {
+          alert("Error: " + data.error);
         }
       })
       .catch(error => {
@@ -249,6 +238,7 @@ window.deleteEvent = function(index) {
       });
   }
 };
+
 
       // Save Event to the database
       function saveEventToDatabase(event) {
@@ -276,6 +266,8 @@ window.deleteEvent = function(index) {
       // Load events when the page loads
       loadEvents();
     });
+    
+    
   </script>
 
 </body>

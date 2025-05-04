@@ -1,51 +1,42 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "secretsecret4";
-$dbname = "ub_lipa_event_scheduler";
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+header("Content-Type: application/json");
 
-// Create connection to MySQL database
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+$eventId = isset($_GET['id']) ? trim($_GET['id']) : '';
+if ($eventId === '') {
+    echo json_encode(["error" => "Missing event ID."]);
+    exit;
 }
 
-// Get the event ID to delete
-$eventId = $_GET['id'];
+$xmlFile = 'C:/xampp_new/htdocs/IPT_UbEvent/dashboard/data/event.xml';
 
-// SQL query to delete the event from the database
-$sql = "DELETE FROM events WHERE id = '$eventId'";
+if (!file_exists($xmlFile)) {
+    echo json_encode(["error" => "XML file not found."]);
+    exit;
+}
 
-// Execute the query and check for success
-if ($conn->query($sql) === TRUE) {
-    // Load the XML file
-    $xmlFile = 'C:/xampp_new/htdocs/IPT_UbEvent/dashboard/data/event.xml';
+$xml = simplexml_load_file($xmlFile);
+$eventFound = false;
 
-    if (file_exists($xmlFile)) {
-        // Load the existing XML file
-        $xml = simplexml_load_file($xmlFile);
+foreach ($xml->event as $index => $event) {
+    if (trim((string)$event->id) === $eventId) {
+        unset($xml->event[$index]);
+        $eventFound = true;
+        break;
+    }
+}
 
-        // Find and remove the event in the XML file by matching the ID
-        foreach ($xml->event as $index => $event) {
-            if ((string)$event->id === $eventId) {
-                unset($xml->event[$index]);
-                break; // Stop once the event is found and removed
-            }
-        }
+if ($eventFound) {
+    clearstatcache(true, $xmlFile);
+    $saved = file_put_contents($xmlFile, $xml->asXML());
 
-        // Save the updated XML file
-        if ($xml->asXML($xmlFile)) {
-            echo json_encode(["message" => "Event deleted successfully from both DB and XML."]);
-        } else {
-            echo json_encode(["error" => "Error saving XML file after deleting the event."]);
-        }
+    if ($saved !== false) {
+        echo json_encode(["message" => "✅ Event deleted from XML."]);
     } else {
-        echo json_encode(["error" => "XML file not found."]);
+        echo json_encode(["error" => "❌ Failed to save XML."]);
     }
 } else {
-    echo json_encode(["error" => "Error deleting event from database: " . $conn->error]);
+    echo json_encode(["error" => "❌ Event not found in XML."]);
 }
-
-$conn->close();
 ?>
