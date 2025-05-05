@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login - UB Lipa Event Scheduler</title>
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -23,15 +24,17 @@
     <!-- Success and error messages -->
     <div id="message"></div>
 
-    <form method="POST" action="../auth/php/login.php"> 
+    <form id="loginForm"> 
       <!-- Username -->
       <label for="username">Username</label>
-      <input type="text" id="username" name="username" placeholder="Enter your username" required title="Enter your username">
+      <input type="text" id="username" name="username" placeholder="Enter your username" required>
 
       <!-- Password -->
-      <label for="password">Password</label>
-      <input type="password" id="password" name="password" placeholder="Enter your password" required title="Enter your password">
-
+      <div class="password-wrapper">
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        <i class="fa-solid fa-eye toggle-password" onclick="togglePassword(this)"></i>
+      </div>      
+      
       <input type="submit" value="Login">
     </form>
 
@@ -39,22 +42,43 @@
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const params = new URLSearchParams(window.location.search);
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault(); // Prevent normal form submission
+
+      const form = e.target;
+      const formData = new FormData(form);
       const messageDiv = document.getElementById("message");
-    
-      if (params.has('error')) {
-        let error = params.get('error');
-        if (error === 'invalid_password') {
-          messageDiv.innerHTML = '<div class="error-message">Invalid password. Please try again.</div>';
-        } else if (error === 'username_not_found') {
-          messageDiv.innerHTML = '<div class="error-message">Username not found. Please register first.</div>';
+
+      fetch("../auth/php/login.php", {
+        method: "POST",
+        body: formData
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          window.location.href = "http://127.0.0.1/IPT_UbEvent/dashboard/Home/home.html";
+        } else {
+          messageDiv.innerHTML = `<div class="error-message">${data.message}</div>`;
         }
-      } else if (params.has('signup') && params.get('signup') === 'success') {
-        messageDiv.innerHTML = '<div class="success-message">Account created successfully! Please login.</div>';
-      }
+      })
+      .catch(error => {
+        messageDiv.innerHTML = `<div class="error-message">An unexpected error occurred.</div>`;
+        console.error("Login error:", error);
+      });
     });
-    </script>
     
+    function togglePassword(icon) {
+    const input = icon.previousElementSibling;
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    } else {
+      input.type = "password";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    }
+  }
+  </script>
 </body>
 </html>

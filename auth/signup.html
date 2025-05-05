@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>Sign Up - UB Lipa Event Scheduler</title>
   <link rel="stylesheet" href="css/style.css"> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
@@ -22,19 +23,21 @@
     <!-- Success or Error Messages Here -->
     <div id="message"></div>
 
-    <form method="POST" action="php/signup.php">
+    <form id="signupForm">
       <label>First Name</label>
-      <input type="text" name="fname" placeholder="Enter your first name" required title="Enter your firstname">
+      <input type="text" name="fname" placeholder="Enter your first name" required>
 
       <label>Last Name</label>
-      <input type="text" name="lname" placeholder="Enter your last name" required title="Enter your lastname">
+      <input type="text" name="lname" placeholder="Enter your last name" required>
 
       <label>Username</label>
-      <input type="text" name="username" placeholder="Enter your username" required title="Enter your username">
+      <input type="text" name="username" placeholder="Enter your username" required>
 
-      <label>Password</label>
-      <input type="password" name="password" placeholder="Enter your password" required title="Enter your password">
-
+      <div class="password-wrapper">
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        <i class="fa-solid fa-eye toggle-password" onclick="togglePassword(this)"></i>
+      </div>
+      
       <input type="submit" value="Sign Up">
     </form>
 
@@ -44,20 +47,44 @@
 </body>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-  const params = new URLSearchParams(window.location.search);
+function togglePassword(icon) {
+  const input = icon.previousElementSibling;
+  if (input.type === "password") {
+    input.type = "text";
+    icon.classList.remove("fa-eye");
+    icon.classList.add("fa-eye-slash");
+  } else {
+    input.type = "password";
+    icon.classList.remove("fa-eye-slash");
+    icon.classList.add("fa-eye");
+  }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const form = document.getElementById("signupForm");
   const messageDiv = document.getElementById("message");
 
-  if (params.has('error')) {
-    let error = params.get('error');
-    if (error === 'username_taken') {
-      messageDiv.innerHTML = '<div class="error-message">Username already exists. Please choose another one.</div>';
-    } else if (error === 'insert_failed') {
-      messageDiv.innerHTML = '<div class="error-message">An error occurred during signup. Please try again.</div>';
+  form.addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    try {
+      const response = await fetch("php/signup.php", {
+        method: "POST",
+        body: formData
+      });
+      const result = await response.json();
+
+      if (result.success) {
+        messageDiv.innerHTML = '<div class="success-message">Account created successfully! Please <a href="login.html">login</a>.</div>';
+        form.reset(); // Optional: reset form
+      } else {
+        messageDiv.innerHTML = `<div class="error-message">${result.message}</div>`;
+      }
+    } catch (err) {
+      messageDiv.innerHTML = '<div class="error-message">Server error. Please try again later.</div>';
     }
-  } else if (params.has('signup') && params.get('signup') === 'success') {
-    messageDiv.innerHTML = '<div class="success-message">Account created successfully! Please login.</div>';
-  }
+  });
 });
 </script>
 

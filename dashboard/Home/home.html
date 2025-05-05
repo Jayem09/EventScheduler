@@ -1,39 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UB Lipa Event Scheduler - Home</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
 
   <!-- HEADER -->
   <header class="topbar">
     <div class="logo-title">
-      <img src="/IPT_UBEVENT/img/ublogo1.png" alt="UB Logo" class="logo">
+      <img src="/IPT_UBEVENT/img/ublogo1.png" alt="UB Logo" class="logo" />
       <span class="title">UB Lipa Event Scheduler</span>
     </div>
     <nav>
       <a href="../Home/home.html">Home</a>
       <a href="../browseEvent/browseEvent.html">Browse Events</a>
       <a href="../browseEvent/addEvents.html">Add Events</a>
-      <a href="#">About</a>
+      <button class="logout-btn" onclick="logoutUser()">Logout</button>
     </nav>
   </header>
 
   <!-- MAIN SECTION -->
-  <main class="upcoming-events">
-    <h2>Welcome to UB Lipa Event Scheduler</h2>
-    <div class="button-container">
-      <a href="../browseEvent/browseEvent.html" class="add-event-btn">See Upcoming Events</a>
+  <main class="home-wrapper">
+    <h2 class="home-heading">Welcome to UB Lipa Event Scheduler</h2>
+    <p id="welcomeText">Welcome, <span id="userDisplay">Guest</span>!</p>
+  
+    <div class="about-container">
+      <h3>About the System</h3>
+      <p class="description">
+        Welcome to the UB Lipa Event Scheduler — your official platform for organizing, managing, and streamlining campus events at the University of Batangas – Lipa Campus. This system is built to support administrators in maintaining a well-coordinated schedule of activities across all departments, ensuring that every event runs smoothly and without conflict.
+      </p>
     </div>
   </main>
+  
 
   <!-- FOOTER -->
   <footer class="footer">
     <p>© UB Lipa Info System</p>
   </footer>
 
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("http://127.0.0.1/IPT_UbEvent/auth/php/getUserInfo.php")
+        .then(response => response.json())
+        .then(data => {
+          if (data && data.first_name && data.last_name) {
+            document.getElementById("userDisplay").textContent = `${data.first_name} ${data.last_name}`;
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching user info:", err);
+        });
+    });
+
+    // Logout function
+  function logoutUser() {
+    fetch("http://127.0.0.1/IPT_UbEvent/auth/php/logout.php")
+      .then(() => {
+        window.location.href = "http://127.0.0.1/IPT_UbEvent/auth/login.html";
+      })
+      .catch(err => {
+        console.error("Logout failed:", err);
+        alert("An error occurred while logging out.");
+      });
+  }
+  </script>
 </body>
 </html>
+

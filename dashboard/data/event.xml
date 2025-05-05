@@ -1,4 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="design.xsl"?>
 <!-- Event entries will be added dynamically -->
-<events><event><id>6816f0197cc4c</id><date>2025-05-21</date><time>10:00 - 11:00 AM</time><eventName>asdfgtyhu</eventName><location>UB LIPA GYMNASIUM</location><department>CMT</department><eventType>sdfghjm,</eventType><targetAudience>sgh</targetAudience><registrationLink>https://gedsw</registrationLink><contactInformation>09090909090</contactInformation><agenda>xdfghjk</agenda></event></events>
+<events>
+  <event>
+    <id>1</id>
+    <date>2025-05-10</date>
+    <time>10:00 AM - 11:04 AM</time>
+    <eventName>CITEC DAY</eventName>
+    <location>UB LIPA GYMNASIUM</location>
+    <department>CITEC</department>
+    <eventType>SPORTS FESTIVAL</eventType>
+    <targetAudience>CITEC</targetAudience>
+    <registrationLink>https://citecday</registrationLink>
+    <contactInformation>0000 - 000 - 0000</contactInformation>
+    <agenda>To enjoy</agenda>
+  </event>
+  <event>
+    <id>2</id>
+    <date>2025-05-16</date>
+    <time>9:00 AM - 10:05 AM</time>
+    <eventName>ENGINEERING DAY</eventName>
+    <location>UB LIPA GYMNASIUM</location>
+    <department>CENAR</department>
+    <eventType>SPORTS FESTIVAL</eventType>
+    <targetAudience>ENGINEERING STUDENTS</targetAudience>
+    <registrationLink>https://engineering</registrationLink>
+    <contactInformation>0909 - 090 - 0099</contactInformation>
+    <agenda>To enjoy the day</agenda>
+  </event>
+<event><id>3</id><date>2025-05-05</date><time>10:00 AM - 12:30 PM</time><eventName>vfdvdvf1</eventName><location>UB LIPA MULTI-PURPOSE HALL (BUILDING C - 4TH FLOOR)</location><department>CITEC</department><eventType>sertyhjk</eventType><targetAudience>it student</targetAudience><registrationLink>https://gedsw</registrationLink><contactInformation>0992687556</contactInformation><agenda>hyggy</agenda></event><event><id>4</id><date>2025-05-05</date><time>4:30 PM - 10:30 PM</time><eventName>Meeting</eventName><location>UB LIPA GYMNASIUM</location><department>CITEC</department><eventType>idk</eventType><targetAudience>cdfghj</targetAudience><registrationLink>https://gedsw</registrationLink><contactInformation>09090909090</contactInformation><agenda>jojfosjso</agenda></event></events>

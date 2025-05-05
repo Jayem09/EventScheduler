@@ -18,7 +18,6 @@
       </head>
       <body>
         <h2>University Events</h2>
-
         <table>
           <tr>
             <th>Date</th>
@@ -33,7 +32,7 @@
             <th>Contact Information</th>
           </tr>
 
-          <xsl:for-each select="events/event">
+<xsl:for-each select="events/event"> 
             <tr>
               <td><xsl:value-of select="date"/></td>
               <td><xsl:value-of select="time"/></td>

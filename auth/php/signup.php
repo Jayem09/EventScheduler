@@ -1,57 +1,56 @@
 <?php
-// Start session if needed
 session_start();
+header('Content-Type: application/json');
 
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = "secretsecret4";
-$dbname = "ub_lipa_event_scheduler";
-
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
+$conn = new mysqli("localhost", "root", "secretsecret4", "ub_lipa_event_scheduler");
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo json_encode(["success" => false, "message" => "Database connection failed."]);
+    exit();
 }
 
-// Process form submission
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $fname = trim($_POST['fname']);
     $lname = trim($_POST['lname']);
     $username = trim($_POST['username']);
-    $password = password_hash(trim($_POST['password']), PASSWORD_DEFAULT); 
+    $rawPassword = trim($_POST['password']);
 
-    // Check if username already exists
-    $check_sql = "SELECT user_id FROM users WHERE username = ?";
-    $check_stmt = $conn->prepare($check_sql);
-    $check_stmt->bind_param("s", $username);
-    $check_stmt->execute();
-    $result = $check_stmt->get_result();
+    // Password validation
+    if (
+        strlen($rawPassword) < 8 ||
+        !preg_match('/[A-Z]/', $rawPassword) ||
+        !preg_match('/[a-z]/', $rawPassword) ||
+        !preg_match('/[0-9]/', $rawPassword) ||
+        !preg_match('/[\W_]/', $rawPassword)
+    ) {
+        echo json_encode([
+            "success" => false,
+            "message" => "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character."
+        ]);
+        exit();
+    }
+
+    // Hash password after validation
+    $password = password_hash($rawPassword, PASSWORD_DEFAULT);
+
+    $check = $conn->prepare("SELECT user_id FROM users WHERE username = ?");
+    $check->bind_param("s", $username);
+    $check->execute();
+    $result = $check->get_result();
 
     if ($result->num_rows > 0) {
-        // Username already exists
-        header("Location: ../auth/signup.html?error=username_taken");
-        exit();
+        echo json_encode(["success" => false, "message" => "Username already taken."]);
     } else {
-        // Insert new user
-        $sql = "INSERT INTO users (username, password, first_name, last_name) VALUES (?, ?, ?, ?)";
-        $stmt = $conn->prepare($sql);
+        $stmt = $conn->prepare("INSERT INTO users (username, password, first_name, last_name) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("ssss", $username, $password, $fname, $lname);
 
         if ($stmt->execute()) {
-            // Successful signup
-            header("Location: ../auth/login.html?signup=success");
-            exit();
+            echo json_encode(["success" => true]);
         } else {
-            // Insert failed
-            header("Location: ../auth/signup.html?error=insert_failed");
-            exit();
+            echo json_encode(["success" => false, "message" => "Signup failed. Please try again."]);
         }
         $stmt->close();
     }
-    $check_stmt->close();
+    $check->close();
 }
 $conn->close();
 ?>

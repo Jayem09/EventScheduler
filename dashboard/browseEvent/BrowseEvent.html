@@ -18,155 +18,96 @@
       <a href="../Home/home.html">Home</a>
       <a href="browseEvent.html">Browse Events</a>
       <a href="addEvents.html">Add Events</a>
-      <a href="#">About</a>
+      <button class="logout-btn" onclick="logoutUser()">Logout</button>
     </nav>
   </header>
 
   <!-- BROWSE EVENTS SECTION -->
   <section class="browse-events">
-    <h2>Browse All Events</h2>
-
-    <!-- FILTERS -->
-    <div class="filters">
-      <label for="department">🔍 Department:</label>
-      <select id="department">
-        <option value="">▼ Select Department</option>
-        <option value="College of Engineering">College of Engineering</option>
-        <option value="College of Arts and Sciences">College of Arts and Sciences</option>
-      </select>
-
-      <label for="date">📆 Date:</label>
-      <input type="date" id="date">
-
-      <button type="button" class="search-btn" id="searchBtn">Search</button>
-    </div>
+    <h2 class="section-title">Browse All Events</h2>
 
     <!-- Export and Import Options -->
     <div class="button-container">
-      <button onclick="window.location.href='http://127.0.0.1/IPT_UbEvent/auth/php/importEvents.php'">Import Events</button>
-      <form method="POST" action="http://127.0.0.1/IPT_UbEvent/auth/php/exportEvents.php" style="display:inline;">
-        <label for="format">Select Export Format:</label>
-        <select name="format" id="format">
+      <button class="btn-import" onclick="window.location.href='http://127.0.0.1/IPT_UbEvent/auth/php/importEvents.php'">
+        Import Events
+      </button>
+
+      <form method="POST" action="http://127.0.0.1/IPT_UbEvent/auth/php/exportEvents.php" class="export-form">
+        <label for="format" class="export-label">Select Export Format:</label>
+        <select name="format" id="format" class="export-dropdown">
           <option value="xml">XML</option>
           <option value="csv">CSV</option>
         </select>
-        <button type="submit" class="export-btn">Export Events</button>
+        <button type="submit" class="btn-export">Export Events</button>
       </form>
-    </div>
-
-    <!-- TABLE CONTAINER -->
-    <div class="table-container">
-      <!-- Events Table -->
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Event Name</th>
-            <th>Location</th>
-            <th>Department</th>
-            <th>Event Type</th>
-            <th>Target Audience</th>
-            <th>Registration Link</th>
-            <th>Contact Information</th>
-            <th>Agenda</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="eventsList">
-          <!-- Events will be added here -->
-        </tbody>
-      </table>
     </div>
   </section>
 
-  <!-- Modal for editing event -->
-  <div id="editModal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="closeEditModal()">&times;</span>
-      <h2>Edit Event</h2>
-      <form id="editEventForm">
-        <label for="editEventName">Event Name:</label>
-        <input type="text" id="editEventName" name="eventName">
-        
-        <label for="editLocation">Location:</label>
-        <input type="text" id="editLocation" name="location">
-
-        <label for="editDepartment">Department:</label>
-        <input type="text" id="editDepartment" name="department">
-
-        <label for="editEventType">Event Type:</label>
-        <input type="text" id="editEventType" name="eventType">
-
-        <label for="editTargetAudience">Target Audience:</label>
-        <input type="text" id="editTargetAudience" name="targetAudience">
-
-        <label for="editRegistrationLink">Registration Link:</label>
-        <input type="url" id="editRegistrationLink" name="registrationLink">
-
-        <label for="editContactInformation">Contact Info:</label>
-        <input type="text" id="editContactInformation" name="contactInformation">
-
-        <label for="editAgenda">Agenda:</label>
-        <textarea id="editAgenda" name="agenda"></textarea>
-
-        <button type="submit">Save Changes</button>
-      </form>
+  <!-- TABLE CONTAINER -->
+  <div class="table-container">
+    <div style="margin-bottom: 10px;">
+      <label for="searchInput"><strong>Search Events:</strong></label>
+      <input type="text" id="searchInput" placeholder="Search any column..." style="padding: 5px; width: 250px;">
     </div>
+
+    <table id="eventTable">
+      <thead>
+        <tr>
+          <th class="sortable" data-index="0"><span>Date</span> ▲▼</th>
+          <th class="sortable" data-index="1"><span>Time</span> ▲▼</th>
+          <th class="sortable" data-index="2"><span>Event Name</span> ▲▼</th>
+          <th class="sortable" data-index="3"><span>Location</span> ▲▼</th>
+          <th class="sortable" data-index="4"><span>Department</span> ▲▼</th>
+          <th class="sortable" data-index="5"><span>Event Type</span> ▲▼</th>
+          <th class="sortable" data-index="6"><span>Target Audience</span> ▲▼</th>
+          <th class="sortable" data-index="7"><span>Registration Link</span> ▲▼</th>
+          <th class="sortable" data-index="8"><span>Contact Information</span> ▲▼</th>
+          <th class="sortable" data-index="9"><span>Agenda</span> ▲▼</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="eventsList">
+        <!-- Events will be dynamically added -->
+      </tbody>
+    </table>
   </div>
 
   <!-- FOOTER -->
   <footer class="footer">
-    <p>© UB Lipa Static Info System</p>
+    <p>© UB Lipa Info System</p>
   </footer>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      let eventsData = [];
+    const sortDirection = {};
 
-      setTimeout(loadEvents, 200);  // 200ms delay to let XML save fully
-
-      // Fetch events from XML file
-      function loadEvents() {
-  const timestamp = new Date().getTime(); // Unique timestamp
-  fetch(`http://127.0.0.1/IPT_UbEvent/dashboard/data/event.xml?cache_buster=${timestamp}`)
-    .then(response => response.text())
-    .then(str => {
-      const parser = new DOMParser();
-      const xmlDoc = parser.parseFromString(str, "text/xml");
-      const events = xmlDoc.getElementsByTagName("event");
-
-      eventsData = [];
-
-      Array.from(events).forEach(event => {
-        eventsData.push({
-          id: event.getElementsByTagName("id")[0]?.textContent || "",
-          date: event.getElementsByTagName("date")[0]?.textContent || "",
-          time: event.getElementsByTagName("time")[0]?.textContent || "",
-          eventName: event.getElementsByTagName("eventName")[0]?.textContent || "",
-          location: event.getElementsByTagName("location")[0]?.textContent || "",
-          department: event.getElementsByTagName("department")[0]?.textContent || "",
-          eventType: event.getElementsByTagName("eventType")[0]?.textContent || "",
-          targetAudience: event.getElementsByTagName("targetAudience")[0]?.textContent || "",
-          registrationLink: event.getElementsByTagName("registrationLink")[0]?.textContent || "",
-          contactInformation: event.getElementsByTagName("contactInformation")[0]?.textContent || "",
-          agenda: event.getElementsByTagName("agenda")[0]?.textContent || ""
+    document.addEventListener("DOMContentLoaded", function () {
+      const timestamp = new Date().getTime();
+      fetch(`http://127.0.0.1/IPT_UbEvent/dashboard/data/event.xml?cache_buster=${timestamp}`)
+        .then(response => response.text())
+        .then(str => {
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(str, "text/xml");
+          const events = Array.from(xmlDoc.getElementsByTagName("event")).map(event => ({
+            id: event.getElementsByTagName("id")[0]?.textContent || "",
+            date: event.getElementsByTagName("date")[0]?.textContent || "",
+            time: event.getElementsByTagName("time")[0]?.textContent || "",
+            eventName: event.getElementsByTagName("eventName")[0]?.textContent || "",
+            location: event.getElementsByTagName("location")[0]?.textContent || "",
+            department: event.getElementsByTagName("department")[0]?.textContent || "",
+            eventType: event.getElementsByTagName("eventType")[0]?.textContent || "",
+            targetAudience: event.getElementsByTagName("targetAudience")[0]?.textContent || "",
+            registrationLink: event.getElementsByTagName("registrationLink")[0]?.textContent || "",
+            contactInformation: event.getElementsByTagName("contactInformation")[0]?.textContent || "",
+            agenda: event.getElementsByTagName("agenda")[0]?.textContent || ""
+          }));
+          displayEvents(events);
         });
-      });
 
-      displayEvents(eventsData);
-    })
-    .catch(error => console.error('Error fetching events:', error));
-}
-
-
-      // Display events in the table
       function displayEvents(events) {
         const eventsList = document.getElementById("eventsList");
-        eventsList.innerHTML = "";  // Clear any existing rows
-
+        eventsList.innerHTML = "";
         events.forEach((event, index) => {
-          const row = document.createElement('tr');
+          const row = document.createElement("tr");
           row.innerHTML = `
             <td>${event.date}</td>
             <td>${event.time}</td>
@@ -178,96 +119,77 @@
             <td><a href="${event.registrationLink}" target="_blank">Register Here</a></td>
             <td>${event.contactInformation}</td>
             <td>${event.agenda}</td>
-            <td>
-              <button onclick="editEvent(${index})">Edit</button>
-              <button onclick="deleteEvent('${event.id}')">Delete</button>
-            </td> <!-- Actions Buttons -->
+            <td><button>Edit</button> <button>Delete</button></td>
           `;
-          eventsList.appendChild(row);  // Append row to the table body
+          eventsList.appendChild(row);
+        });
+        initSortableHeaders();
+      }
+
+      function initSortableHeaders() {
+        document.querySelectorAll("th.sortable").forEach(th => {
+          th.style.cursor = "pointer";
+          th.addEventListener("click", () => {
+            const index = parseInt(th.getAttribute("data-index"));
+            sortTable(index, th);
+          });
         });
       }
 
-      // Edit Event function
-      window.editEvent = function(index) {
-        const event = eventsData[index];
-        document.getElementById('editEventName').value = event.eventName;
-        document.getElementById('editLocation').value = event.location;
-        document.getElementById('editDepartment').value = event.department;
-        document.getElementById('editEventType').value = event.eventType;
-        document.getElementById('editTargetAudience').value = event.targetAudience;
-        document.getElementById('editRegistrationLink').value = event.registrationLink;
-        document.getElementById('editContactInformation').value = event.contactInformation;
-        document.getElementById('editAgenda').value = event.agenda;
+      function sortTable(colIndex, thElement) {
+        const table = document.getElementById("eventTable");
+        const tbody = table.tBodies[0];
+        const rows = Array.from(tbody.rows);
+        const isAsc = !(sortDirection[colIndex] = !sortDirection[colIndex]);
 
-        document.getElementById('editModal').style.display = 'block';
+        rows.sort((a, b) => {
+          let valA = a.cells[colIndex].textContent.trim();
+          let valB = b.cells[colIndex].textContent.trim();
 
-        document.getElementById('editEventForm').onsubmit = function(event) {
-          event.preventDefault();
-
-          event.eventName = document.getElementById('editEventName').value;
-          event.location = document.getElementById('editLocation').value;
-          event.department = document.getElementById('editDepartment').value;
-          event.eventType = document.getElementById('editEventType').value;
-          event.targetAudience = document.getElementById('editTargetAudience').value;
-          event.registrationLink = document.getElementById('editRegistrationLink').value;
-          event.contactInformation = document.getElementById('editContactInformation').value;
-          event.agenda = document.getElementById('editAgenda').value;
-
-          closeEditModal();
-          saveEventToDatabase(event);
-          loadEvents();
-        };
-      };
-
-// Delete Event function
-window.deleteEvent = function(eventId) {
-  if (confirm("Are you sure you want to delete this event?")) {
-    fetch(`http://127.0.0.1/IPT_UbEvent/auth/php/deleteEvent.php?id=${eventId}`, { method: 'GET' })
-      .then(response => response.json())
-      .then(data => {
-        if (data.message) {
-          alert(data.message);
-          loadEvents();  // Refresh table
-        } else {
-          alert("Error: " + data.error);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-        alert("An error occurred while deleting the event.");
-      });
-  }
-};
-
-
-      // Save Event to the database
-      function saveEventToDatabase(event) {
-        fetch('http://127.0.0.1/IPT_UbEvent/auth/php/editEvent.php', {
-          method: 'POST',
-          body: JSON.stringify(event),
-          headers: { 'Content-Type': 'application/json' }
-        })
-        .then(response => response.json())
-        .then(data => {
-          console.log(data);
-          if (data.message) {
-            alert(data.message);
-            loadEvents();  // Reload the events list after saving
+          if (colIndex === 0) {
+            const timeA = a.cells[1].textContent.split('-')[0].trim();
+            const timeB = b.cells[1].textContent.split('-')[0].trim();
+            const fullA = new Date(`${valA} ${timeA}`);
+            const fullB = new Date(`${valB} ${timeB}`);
+            return isAsc ? fullA - fullB : fullB - fullA;
           }
-        })
-        .catch(error => console.log('Error:', error));
+          return isAsc
+            ? valA.localeCompare(valB)
+            : valB.localeCompare(valA);
+        });
+
+        rows.forEach(row => tbody.appendChild(row));
+
+        const headers = thElement.parentElement.children;
+        for (let i = 0; i < headers.length; i++) {
+          if (i !== colIndex && headers[i].classList.contains("sortable")) {
+            const span = headers[i].querySelector("span");
+            if (span) headers[i].innerHTML = `<span>${span.textContent}</span> ▲▼`;
+          }
+        }
+
+        const activeSpan = thElement.querySelector("span");
+        if (activeSpan) {
+          thElement.innerHTML = `<span>${activeSpan.textContent}</span> ${isAsc ? '▲' : '▼'}`;
+        }
       }
 
-      // Close the edit modal
-      function closeEditModal() {
-        document.getElementById('editModal').style.display = 'none';
-      }
-
-      // Load events when the page loads
-      loadEvents();
+      document.getElementById("searchInput").addEventListener("keyup", function () {
+        const filter = this.value.toLowerCase();
+        const rows = document.querySelectorAll("#eventTable tbody tr");
+        rows.forEach(row => {
+          const cells = Array.from(row.querySelectorAll("td")).slice(0, -1);
+          const match = cells.some(cell => cell.textContent.toLowerCase().includes(filter));
+          row.style.display = match ? "" : "none";
+        });
+      });
     });
-    
-    
+
+    function logoutUser() {
+      fetch("http://127.0.0.1/IPT_UbEvent/auth/php/logout.php")
+        .then(() => window.location.href = "http://127.0.0.1/IPT_UbEvent/auth/login.html")
+        .catch(err => alert("Logout failed."));
+    }
   </script>
 
 </body>
