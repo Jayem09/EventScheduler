@@ -1,66 +1,24 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "secretsecret4"; 
-$dbname = "ub_lipa_event_scheduler"; 
+$targetDir = dirname(__DIR__, 2) . '/dashboard/data/';
+$targetFile = $targetDir . 'event.xml';
 
-// Create connection to the database
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Load events from event.xml
-$xmlFile = 'C:/xampp_new/htdocs/IPT_UbEvent/dashboard/data/event.xml';  
-$xml = simplexml_load_file($xmlFile);
-
-// Flag to track whether new events are inserted
-$newDataImported = false;
-
-foreach ($xml->event as $event) {
-    $date = $event->date;
-    $time = $event->time;
-    $eventName = $event->eventName;
-    $location = $event->location;
-    $department = $event->department;
-    $eventType = $event->eventType;
-    $targetAudience = $event->targetAudience;
-    $registrationLink = $event->registrationLink;
-    $contactInformation = $event->contactInformation;
-    $agenda = $event->agenda;
-
-    // Check if the event already exists in the database 
-    $checkSql = "SELECT * FROM events WHERE event_name = '$eventName' AND date = '$date'";
-    $checkResult = $conn->query($checkSql);
-
-    if ($checkResult->num_rows == 0) {
-        // If the event doesn't exist, insert it into the database
-        $sql = "INSERT INTO events (date, time, event_name, location, department, event_type, target_audience, registration_link, contact_information, agenda)
-                VALUES ('$date', '$time', '$eventName', '$location', '$department', '$eventType', '$targetAudience', '$registrationLink', '$contactInformation', '$agenda')";
-
-        if ($conn->query($sql)) {
-            // Mark the flag as true if a new event was successfully inserted
-            $newDataImported = true;
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
-        }
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['xmlFile']) && $_FILES['xmlFile']['error'] === UPLOAD_ERR_OK) {
+    if (!is_dir($targetDir)) {
+        mkdir($targetDir, 0777, true);
     }
-}
 
-if ($newDataImported) {
-    // Display import success message before redirection
-    echo "Import successful! Redirecting...";
+    // Move uploaded file to the correct location
+    if (move_uploaded_file($_FILES['xmlFile']['tmp_name'], $targetFile)) {
+        // Success: Show alert and redirect to the HTML page
+        echo "<script>
+                alert('XML file imported successfully!');
+                window.location.href = 'http://127.0.0.1/IPT_UbEvent/dashboard/browseEvent/browseEvent.html';
+              </script>";
+        exit();
+    } else {
+        echo "<script>alert('Failed to move uploaded XML file.'); history.back();</script>";
+    }
 } else {
-    // If no new data was imported, display a message
-    echo "All data is already imported.";
+    echo "<script>alert('Invalid file or upload error.'); history.back();</script>";
 }
-
-// Close the database connection
-$conn->close();
-
-// Redirect after a short delay to the browseEvent page
-header("refresh:3;url=http://127.0.0.1/IPT_UbEvent/dashboard/browseEvent/BrowseEvent.html");
-exit();
 ?>

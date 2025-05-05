@@ -26,13 +26,15 @@
   <section class="browse-events">
     <h2 class="section-title">Browse All Events</h2>
 
-    <!-- Export and Import Options -->
     <div class="button-container">
-      <button class="btn-import" onclick="window.location.href='http://127.0.0.1/IPT_UbEvent/auth/php/importEvents.php'">
-        Import Events
-      </button>
-
-      <form method="POST" action="http://127.0.0.1/IPT_UbEvent/auth/php/exportEvents.php" class="export-form">
+      <!-- Import Events -->
+      <form action="http://127.0.0.1/IPT_UbEvent/auth/php/importEvents.php" method="post" enctype="multipart/form-data" style="display:inline-block; margin-right: 20px;">
+        <input type="file" name="xmlFile" accept=".xml" required>
+        <button type="submit" class="btn-import">Import Events</button>
+      </form>
+    
+      <!-- Export Events -->
+      <form method="POST" action="http://127.0.0.1/IPT_UbEvent/auth/php/exportEvents.php" class="export-form" style="display:inline-block;">
         <label for="format" class="export-label">Select Export Format:</label>
         <select name="format" id="format" class="export-dropdown">
           <option value="xml">XML</option>
@@ -41,6 +43,8 @@
         <button type="submit" class="btn-export">Export Events</button>
       </form>
     </div>
+    
+    
   </section>
 
   <!-- TABLE CONTAINER -->
