@@ -16,27 +16,21 @@ if (!file_exists($xmlFile)) {
     exit;
 }
 
-$xml = simplexml_load_file($xmlFile);
-$eventFound = false;
+// Load with DOMDocument
+$dom = new DOMDocument();
+$dom->preserveWhiteSpace = false;
+$dom->formatOutput = true;
+$dom->load($xmlFile);
 
-foreach ($xml->event as $index => $event) {
-    if (trim((string)$event->id) === $eventId) {
-        unset($xml->event[$index]);
-        $eventFound = true;
-        break;
-    }
-}
+$xpath = new DOMXPath($dom);
+$events = $xpath->query("//event[id='$eventId']");
 
-if ($eventFound) {
-    clearstatcache(true, $xmlFile);
-    $saved = file_put_contents($xmlFile, $xml->asXML());
-
-    if ($saved !== false) {
-        echo json_encode(["message" => "✅ Event deleted from XML."]);
-    } else {
-        echo json_encode(["error" => "❌ Failed to save XML."]);
-    }
+if ($events->length > 0) {
+    $event = $events->item(0);
+    $event->parentNode->removeChild($event);
+    $dom->save($xmlFile);
+    echo json_encode(["message" => "✅ Event deleted"]);
 } else {
-    echo json_encode(["error" => "❌ Event not found in XML."]);
+    echo json_encode(["error" => "❌ Event not found"]);
 }
 ?>

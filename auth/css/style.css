@@ -24,7 +24,37 @@ body {
     display: flex;
     align-items: center;
 }
-
+.edit-btn {
+    background-color: #4CAF50; /* green */
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    margin-right: 5px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .edit-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .delete-btn {
+    background-color: #f44336; /* red */
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .delete-btn:hover {
+    background-color: #e53935;
+  }
+  
 .logo {
     width: 50px; 
     height: auto;
@@ -132,5 +162,119 @@ a:hover {
     color: #5b0b1e;
     cursor: pointer;
   }
-  
-  
+ /* Modal Overlay */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Modal Card */
+.modal-content {
+  background: #fff;
+  padding: 30px 40px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+  animation: slideFadeIn 0.3s ease-in-out;
+  overflow-y: auto;
+  max-height: 90vh;
+}
+
+/* Smooth animation */
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Title */
+.modal-content h2 {
+  margin-top: 0;
+  font-size: 24px;
+  color: #222;
+  margin-bottom: 24px;
+}
+
+/* Form Styling */
+#editForm {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+#editForm label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+}
+
+#editForm input,
+#editForm textarea {
+  padding: 10px 14px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#editForm input:focus,
+#editForm textarea:focus {
+  border-color: #4CAF50;
+  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
+  outline: none;
+}
+
+/* Button Container */
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* Buttons */
+.modal-save-btn,
+.modal-cancel-btn {
+  padding: 10px 22px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.modal-save-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.modal-save-btn:hover {
+  background-color: #43a047;
+}
+
+.modal-cancel-btn {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.modal-cancel-btn:hover {
+  background-color: #d6d6d6;
+}

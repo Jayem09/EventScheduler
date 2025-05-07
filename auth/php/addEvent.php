@@ -44,8 +44,9 @@ if (
         $isSameLocation = strcasecmp($newLocation, $existingLocation) === 0;
         $isTimeOverlap = ($newStart < $existingEnd && $newEnd > $existingStart);
 
+        // If there is an overlap in date, location, and time, show error
         if ($isSameDate && $isSameLocation && $isTimeOverlap) {
-            echo "Error: This event overlaps with an existing event.";
+            echo json_encode(["error" => "Error: This event overlaps with an existing event."]);
             exit();
         }
     }
@@ -77,34 +78,27 @@ if (
         // ✅ Save to Database
         $conn = new mysqli("localhost", "root", "secretsecret4", "ub_lipa_event_scheduler");
         if ($conn->connect_error) {
-            echo "XML saved, but DB connection failed: " . $conn->connect_error;
+            echo json_encode(["error" => "XML saved, but DB connection failed: " . $conn->connect_error]);
             exit();
         }
 
-        $eventName = $conn->real_escape_string($_POST['eventName']);
-        $location = $conn->real_escape_string($_POST['location']);
-        $department = $conn->real_escape_string($_POST['department']);
-        $eventType = $conn->real_escape_string($_POST['eventType']);
-        $targetAudience = $conn->real_escape_string($_POST['targetAudience']);
-        $registrationLink = $conn->real_escape_string($_POST['registrationLink']);
-        $contactInformation = $conn->real_escape_string($_POST['contactInformation']);
-        $agenda = $conn->real_escape_string($_POST['agenda']);
+        // Prepare statement to avoid SQL injection
+        $stmt = $conn->prepare("INSERT INTO events (date, time, event_name, location, department, event_type, target_audience, registration_link, contact_information, agenda)
+                                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssssssss", $newDate, $newTimeRange, $_POST['eventName'], $_POST['location'], $_POST['department'], $_POST['eventType'], $_POST['targetAudience'], $_POST['registrationLink'], $_POST['contactInformation'], $_POST['agenda']);
 
-        $sql = "INSERT INTO events (date, time, event_name, location, department, event_type, target_audience, registration_link, contact_information, agenda)
-                VALUES ('$newDate', '$newTimeRange', '$eventName', '$location', '$department', '$eventType', '$targetAudience', '$registrationLink', '$contactInformation', '$agenda')";
-
-        if ($conn->query($sql)) {
-            echo "Success";
+        if ($stmt->execute()) {
+            echo json_encode(["success" => "Event successfully added."]);
         } else {
-            echo "XML saved but DB insert failed: " . $conn->error;
+            echo json_encode(["error" => "DB insert failed: " . $conn->error]);
         }
 
+        $stmt->close();
         $conn->close();
     } else {
-        echo "Error saving to XML. Please check file permissions.";
+        echo json_encode(["error" => "Error saving to XML. Please check file permissions."]);
     }
 
 } else {
-    echo "Error: Missing required form fields.";
+    echo json_encode(["error" => "Error: Missing required form fields."]);
 }
-?>
