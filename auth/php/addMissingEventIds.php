@@ -7,7 +7,7 @@ $xmlFile = 'C:/xampp_new/htdocs/IPT_UbEvent/dashboard/data/event.xml';
 
 // Check if file exists
 if (!file_exists($xmlFile)) {
-    die("❌ XML file not found.");
+    die(" XML file not found.");
 }
 
 // Load XML using DOMDocument
