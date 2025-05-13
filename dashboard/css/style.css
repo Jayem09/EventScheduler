@@ -346,6 +346,7 @@
         box-sizing: border-box;
       }
 
+
       .modal-content h3 {
         margin-top: 0;
         font-size: 22px;
@@ -425,3 +426,240 @@
           margin-left: 0;
         }
       }
+      
+      .upcoming-panel {
+        background: #f8f9fd;
+        padding: 30px;
+        border-radius: 16px;
+        max-width: 400px;
+        margin: 20px auto;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+      }
+      
+      .upcoming-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #333;
+      }
+      
+      .upcoming-sub {
+        font-size: 14px;
+        color: #777;
+        margin-bottom: 20px;
+      }
+      
+      .event-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      
+      .event-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 16px 20px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        border-left: 5px solid #6b46c1;
+      }
+      
+      .event-card .event-time {
+        font-size: 13px;
+        color: #6b46c1;
+        font-weight: bold;
+      }
+      
+      .event-card .event-title {
+        font-weight: 600;
+        font-size: 16px;
+        color: #222;
+      }
+      
+      .event-card .event-desc {
+        font-size: 13px;
+        color: #666;
+      }
+      
+      .event-date {
+        font-size: 13px;
+        font-weight: 600;
+        color: #444;
+      }
+      .dashboard-wrapper {
+        display: flex;
+        gap: 40px;
+        padding: 30px;
+        justify-content: space-between;
+        flex-wrap: wrap;
+      }
+      
+      .upcoming-panel {
+        flex: 1 1 300px;
+        background: #f8f9fd;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        max-height: 700px;
+        overflow-y: auto; 
+        padding-right: 15px;
+      }
+      
+/* Calendar Panel Styling */
+.calendar-panel {
+  flex: 2 1 600px;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  margin: 0 auto; /* Centering the calendar panel */
+  width: 100%; /* Full width for responsiveness */
+}
+
+/* Calendar Title */
+.calendar-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #b41d35; /* Maroon color for title */
+  text-align: center; /* Center the title */
+}
+
+/* Calendar Grid Styling */
+.calendar-grid {
+  font-family: 'Courier New', Courier, monospace;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 columns for the week days */
+  gap: 10px;
+  font-size: 14px;
+}
+
+/* Ensure the calendar days do not expand */
+.calendar-grid .day {
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 8px;
+  min-height: 100px; /* Ensure the boxes have a consistent height */
+  background: #f9f9f9;
+  position: relative;
+  cursor: pointer;
+  overflow: hidden; /* Prevent the box from expanding if events exceed */
+}
+
+/* Add a scrollable container for events if there are multiple events for a single day */
+.calendar-grid .day .events-container {
+  max-height: 60px; /* Set a limit for the height of the events */
+  overflow-y: auto; /* Enable scrolling if there are too many events */
+  margin-top: 10px;
+}
+
+/* Style for event badges inside each day box */
+.calendar-grid .event {
+  font-size: 12px;
+  margin-top: 4px;
+  background-color: #e6eaff;
+  padding: 2px 4px;
+  border-radius: 5px;
+  color: #333;
+  max-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Ensure text doesn't overflow */
+}
+
+/* Modal for Day Events */
+#eventModal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6); /* Dark transparent background */
+  z-index: 1000;
+  display: flex; /* Use flexbox for centering */
+  align-items: center; /* Center the modal vertically */
+  justify-content: center; /* Center the modal horizontally */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+
+/* Modal Content Box */
+#eventModal .modal-content {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px; /* Limit modal width */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  max-height: 95vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+/* Close button styling */
+.close {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  float: right;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+}
+
+
+/* Day Date Styling */
+.calendar-grid .day .date {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #000; 
+}
+
+/* Event Styling */
+.calendar-grid .event {
+  font-size: 12px;
+  margin-top: 4px;
+  background-color: #e6eaff;
+  padding: 2px 4px;
+  border-radius: 5px;
+  color: #333; /* Dark text for event names */
+}
+
+/* Calendar Navigation Buttons */
+#calendar-nav {
+  display: flex;
+  justify-content: center; /* Center align the buttons */
+  gap: 20px; /* Space between the buttons */
+  margin-bottom: 20px; /* Space below the buttons */
+}
+
+#prevMonth, #nextMonth {
+  background-color: #b41d35; /* Maroon background */
+  color: white; /* White text color */
+  border: 1px solid #b41d35; /* Maroon border */
+  padding: 10px 20px; /* Padding for better button size */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Pointer cursor */
+  border-radius: 5px; /* Rounded corners */
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+}
+
+#prevMonth:hover, #nextMonth:hover {
+  background-color: #9e1325; /* Darker maroon on hover */
+  color: #fff; /* White text on hover */
+}
+
+#calendarMonth {
+  font-size: 18px; /* Larger font for month text */
+  font-weight: bold; /* Bold text */
+  color: #333; /* Dark color for the month text */
+  margin-top: 10px; /* Space above the month */
+  text-align: center; /* Center-align month text */
+}
