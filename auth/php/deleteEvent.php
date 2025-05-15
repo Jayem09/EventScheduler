@@ -9,7 +9,7 @@ if ($eventId === '') {
     exit;
 }
 
-$xmlFile = 'C:/xampp_new/htdocs/IPT_UbEvent/dashboard/  data/event.xml';
+$xmlFile = 'C:/xampp_new/htdocs/IPT_UbEvent/dashboard/data/event.xml';
 
 if (!file_exists($xmlFile)) {
     echo json_encode(["error" => "XML file not found."]);

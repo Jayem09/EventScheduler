@@ -1,32 +1,7 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <events>
   <event>
-    <id>4</id>
-    <date>2025-05-11</date>
-    <time>9:00 - 10:05 AM</time>
-    <eventName>Engineering Day</eventName>
-    <location>UB LIPA MULTI-PURPOSE HALL</location>
-    <department>CITEC</department>
-    <eventType>SPORTS FESTIVAL</eventType>
-    <targetAudience>ENGINEERING STUDENTS</targetAudience>
-    <registrationLink>Register Here</registrationLink>
-    <contactInformation>0909 - 090 - 0099</contactInformation>
-    <agenda>To enjoy the day</agenda>
-  </event>
-  <event>
-    <id>5</id>
-    <date>2025-06-01</date>
-    <time>08:30 AM - 12:00 PM</time>
-    <eventName>Technology Summit 2025</eventName>
-    <location>UB LIPA CONVENTION HALL</location>
-    <department>COMPSCI</department>
-    <eventType>CONFERENCE</eventType>
-    <targetAudience>ALL STUDENTS</targetAudience>
-    <registrationLink>https://ubsummit2025.com/register</registrationLink>
-    <contactInformation>0917-123-4567</contactInformation>
-    <agenda>Discuss emerging tech and innovations</agenda>
-  </event>
-  <event>
+    <id>3</id>
     <date>2025-05-10</date>
     <time>10:00 AM - 11:04 AM</time>
     <eventName>CITEC DAY</eventName>
@@ -39,6 +14,7 @@
     <agenda>To enjoy</agenda>
   </event>
   <event>
+    <id>4</id>
     <date>2025-05-16</date>
     <time>9:00 AM - 10:05 AM</time>
     <eventName>ENGINEERING DAY</eventName>
@@ -51,6 +27,7 @@
     <agenda>To enjoy the day</agenda>
   </event>
   <event>
+    <id>5</id>
     <date>2025-05-05</date>
     <time>10:00 AM - 12:30 PM</time>
     <eventName>vfdvdvf1</eventName>
@@ -63,6 +40,7 @@
     <agenda>hyggy</agenda>
   </event>
   <event>
+    <id>6</id>
     <date>2025-05-05</date>
     <time>4:30 PM - 10:30 PM</time>
     <eventName>Meeting</eventName>
@@ -75,18 +53,7 @@
     <agenda>jojfosjso</agenda>
   </event>
   <event>
-    <date>2025-06-01</date>
-    <time>08:30 AM - 12:00 PM</time>
-    <eventName>Technology Summit 2025</eventName>
-    <location>UB LIPA CONVENTION HALL</location>
-    <department>COMPSCI</department>
-    <eventType>CONFERENCE</eventType>
-    <targetAudience>ALL STUDENTS</targetAudience>
-    <registrationLink>https://ubsummit2025.com/register</registrationLink>
-    <contactInformation>0917-123-4567</contactInformation>
-    <agenda>Discuss emerging tech and innovations</agenda>
-  </event>
-  <event>
+    <id>7</id>
     <date>2025-06-10</date>
     <time>01:00 PM - 04:00 PM</time>
     <eventName>Career Orientation</eventName>
@@ -99,6 +66,7 @@
     <agenda>Guide students on job applications and interviews</agenda>
   </event>
   <event>
+    <id>8</id>
     <date>2025-06-15</date>
     <time>09:00 AM - 11:00 AM</time>
     <eventName>Web Dev Workshop</eventName>
@@ -111,6 +79,7 @@
     <agenda>Hands-on coding with modern web tools</agenda>
   </event>
   <event>
+    <id>9</id>
     <date>2025-06-20</date>
     <time>02:00 PM - 06:00 PM</time>
     <eventName>Student Council General Assembly</eventName>
@@ -123,18 +92,7 @@
     <agenda>Updates, announcements, and student concerns</agenda>
   </event>
   <event>
-    <date>2025-05-05</date>
-    <time>10:14 AM - 2:18 PM</time>
-    <eventName>reffef</eventName>
-    <location>UB LIPA CAFE TRATTORIA (BUILDING C - 2ND FLOOR)</location>
-    <department>CEAS</department>
-    <eventType>fefeff</eventType>
-    <targetAudience>gerjkghreiunef</targetAudience>
-    <registrationLink>https://gedsw</registrationLink>
-    <contactInformation>ergnegheg</contactInformation>
-    <agenda>gegheugeg</agenda>
-  </event>
-  <event>
+    <id>10</id>
     <date>2025-05-23</date>
     <time>1:30 AM - 2:34 AM</time>
     <eventName>gdhsghdf</eventName>
@@ -147,6 +105,7 @@
     <agenda>fdsfds</agenda>
   </event>
   <event>
+    <id>11</id>
     <date>2025-05-23</date>
     <time>1:30 AM - 12:36 AM</time>
     <eventName>fhjiefhef</eventName>
@@ -159,6 +118,7 @@
     <agenda>idk</agenda>
   </event>
   <event>
+    <id>12</id>
     <date>2025-05-24</date>
     <time>10:55 AM - 11:54 AM</time>
     <eventName>dw</eventName>
@@ -171,6 +131,7 @@
     <agenda>dw</agenda>
   </event>
   <event>
+    <id>13</id>
     <date>2025-05-07</date>
     <time>3:22 PM - 7:32 PM</time>
     <eventName>secrettt</eventName>
@@ -179,7 +140,7 @@
     <eventType>jphn maf</eventType>
     <targetAudience>fdfdfdf</targetAudience>
     <registrationLink>https://dsertykjyf</registrationLink>
-    <contactInformation>johnmadm </contactInformation>
+    <contactInformation>johnmadm</contactInformation>
     <agenda>fejfnsfsdf</agenda>
   </event>
 </events>
